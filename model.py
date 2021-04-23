@@ -70,6 +70,52 @@ class EventOwner(db.Model):
 class EventAttended(db.Model):
     """Event(s) attended by user."""
 
+    __tablename__ = 'event_attended'
+
+    user_id = db.Column(db.Integer, ForeignKey=('users.user_id'), nullable=False)
+    event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
+
+    # Same question as EventOwner class
+    user = db.relationship('User', backref='event_owner')
+    event = db.relationship('Event', backref='event_owner')
+
+    # Same question as EventOwner class
+    def __repr__(self):
+        return 'f<EventOwner = user_id{self.user_id} event_id{self.event_id}>'
+
 
 class Post(db.Model):
     """A post."""
+
+    __tablename__ = 'posts'
+
+    post_id = db.Column(db.Integer,
+                        primary_key=True,
+                        autoincrment=True,
+                        nullable=False
+                        )
+    post_date = db.Column(db.Date, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, ForeignKey=('users.user_id'), nullable=False)
+    event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
+
+    # Same question as EventOwner class
+    user = db.relationship('User', backref='event_owner')
+    event = db.relationship('Event', backref='event_owner')
+
+
+def connect_to_db(flask_app, database='knitalong', echo=False):
+    """Connect to database."""
+
+    flask_app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{database}"
+    flask_app.config["SQLALCHEMY_ECHO"] = echo
+    flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    db.app = flask_app
+    db.init_app(flask_app)
+
+
+if __name__ == "__main__":
+    from server import app
+
+    connect_to_db(app)
