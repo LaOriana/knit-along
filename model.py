@@ -24,7 +24,7 @@ class User(db.Model):
     image = db.Column(db.String, nullable=True)
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} username={username} email={email}>'
+        return f'<User user_id={self.user_id} username={self.username} email={self.email}>'
 
 
 class Event(db.Model):
@@ -47,11 +47,24 @@ class Event(db.Model):
     # chat = db.Column(db.String, nullable=False)
 
     def __repr__(self):
-        return f'<Event = event_id{event_id} event_name{event_name} start_date={start_date} end_date={end_date} pattern={pattern} >'
+        return f'<Event = event_id{self.event_id} event_name{self.event_name} start_date={self.start_date} end_date={self.end_date} pattern={self.pattern}>'
 
 
 class EventOwner(db.Model):
     """Owner of an event."""
+
+    __tablename__ = 'event_owner'
+
+    user_id = db.Column(db.Integer, ForeignKey=('users.user_id'), nullable=False)
+    event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
+
+    # Do I need relationships? Ask if I will ref user and event later?
+    user = db.relationship('User', backref='event_owner')
+    event = db.relationship('Event', backref='event_owner')
+
+    # Should I be using self.user_id or self.users.user_id (same for event_id)
+    def __repr__(self):
+        return 'f<EventOwner = user_id{self.user_id} event_id{self.event_id}>'
 
 
 class EventAttended(db.Model):
