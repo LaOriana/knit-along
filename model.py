@@ -7,19 +7,20 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
-    # Is nullable needed? 
+    # Is nullable needed for primary key? 
+        # No, bc it's already not nullable
     # Should email character limit be 64 or 320?
         # The [user] section can be a maximum of 64 characters, 
         # and the [mysite] section can be a maximum of 255. 
         # The “@” symbol counts as the final character
     # Is the image correct? Would the string be a link?
+        # yes
     user_id = db.Column(db.Integer, 
                         primary_key=True, 
-                        autoincrment=True, 
-                        nullable=False
+                        autoincrment=True
                         )
     username = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(320), nullable=False)
     password = db.Column(db.String, nullable=False)
     image = db.Column(db.String, nullable=True)
 
@@ -34,10 +35,10 @@ class Event(db.Model):
 
     # Is db.Date() correct?
     # Pattern - Is string the correct usage for the API link
+    # Yes, can also use rav ID if available?
     event_id = db.Column(db.Integer,
                         primary_key=True,
-                        autoincrment=True,
-                        nullable=False
+                        autoincrment=True
                         )
     event_name = db.Column(db.String(128), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
@@ -48,6 +49,7 @@ class Event(db.Model):
 
     def __repr__(self):
         return f'<Event = event_id{self.event_id} event_name{self.event_name} start_date={self.start_date} end_date={self.end_date} pattern={self.pattern}>'
+        # return f'<Event {self.event_name} #{self.event_id}>'
 
 
 class EventOwner(db.Model):
@@ -59,12 +61,16 @@ class EventOwner(db.Model):
     event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
 
     # Do I need relationships? Ask if I will ref user and event later?
+    # Move relationship to user and event classes 
+    # Many to many demo code
+    #secondary ref
     user = db.relationship('User', backref='event_owner')
     event = db.relationship('Event', backref='event_owner')
 
     # Should I be using self.user_id or self.users.user_id (same for event_id)
+    # How I have it is fine
     def __repr__(self):
-        return 'f<EventOwner = user_id{self.user_id} event_id{self.event_id}>'
+        return f'<EventOwner = user_id{self.user_id} event_id{self.event_id}>'
 
 
 class EventAttended(db.Model):
@@ -76,12 +82,15 @@ class EventAttended(db.Model):
     event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
 
     # Same question as EventOwner class
+    # Move relationship to user and event classes 
+    # Many to many demo code
+    #secondary ref
     user = db.relationship('User', backref='event_owner')
     event = db.relationship('Event', backref='event_owner')
 
     # Same question as EventOwner class
     def __repr__(self):
-        return 'f<EventOwner = user_id{self.user_id} event_id{self.event_id}>'
+        return f'<EventOwner = user_id{self.user_id} event_id{self.event_id}>'
 
 
 class Post(db.Model):
@@ -100,10 +109,11 @@ class Post(db.Model):
     event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
 
     # Same question as EventOwner class
-    user = db.relationship('User', backref='event_owner')
-    event = db.relationship('Event', backref='event_owner')
+    #backref can be named anything it's not the name of the table
+    user = db.relationship('User', backref='posts')
+    event = db.relationship('Event', backref='posts')
 
-
+    # change echo to True to see thing in console
 def connect_to_db(flask_app, database='knitalong', echo=False):
     """Connect to database."""
 
