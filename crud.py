@@ -1,4 +1,4 @@
-"""CRUD operations"""
+"""CRUD operations."""
 
 from model import db, User, Event, EventOwner, EventAttended, Post, connect_to_db
 
