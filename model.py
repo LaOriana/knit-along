@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy 
 
-db = SQLAlchemy
+db = SQLAlchemy()
 
 class User(db.Model):
     """A user."""
@@ -17,12 +17,15 @@ class User(db.Model):
         # yes
     user_id = db.Column(db.Integer, 
                         primary_key=True, 
-                        autoincrment=True
+                        autoincrement=True
                         )
     username = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(320), nullable=False)
     password = db.Column(db.String, nullable=False)
     image = db.Column(db.String, nullable=True)
+
+    owned_events = db.relationship('Event', secondary='event_owner')
+    attended_events = db.relationship('Event', secondary='event_attended')
 
     def __repr__(self):
         return f'<User user_id={self.user_id} username={self.username} email={self.email}>'
@@ -38,7 +41,7 @@ class Event(db.Model):
     # Yes, can also use rav ID if available?
     event_id = db.Column(db.Integer,
                         primary_key=True,
-                        autoincrment=True
+                        autoincrement=True
                         )
     event_name = db.Column(db.String(128), nullable=False)
     start_date = db.Column(db.Date(), nullable=False)
@@ -46,6 +49,9 @@ class Event(db.Model):
     pattern = db.Column(db.String, nullable=False)
     # Do I need my chat forum running before I can add this?
     # chat = db.Column(db.String, nullable=False)
+
+    owners = db.relationship('User', secondary='event_owner')
+    attendees = db.relationship('User', secondary='event_attended')
 
     def __repr__(self):
         return f'<Event = event_id{self.event_id} event_name{self.event_name} start_date={self.start_date} end_date={self.end_date} pattern={self.pattern}>'
@@ -57,15 +63,12 @@ class EventOwner(db.Model):
 
     __tablename__ = 'event_owner'
 
-    user_id = db.Column(db.Integer, ForeignKey=('users.user_id'), nullable=False)
-    event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
-
-    # Do I need relationships? Ask if I will ref user and event later?
-    # Move relationship to user and event classes 
-    # Many to many demo code
-    #secondary ref
-    user = db.relationship('User', backref='event_owner')
-    event = db.relationship('Event', backref='event_owner')
+    owner_id = db.Column(db.Integer,
+                        primary_key=True,
+                        autoincrement=True
+                        )
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.event_id'), nullable=False)
 
     # Should I be using self.user_id or self.users.user_id (same for event_id)
     # How I have it is fine
@@ -78,15 +81,18 @@ class EventAttended(db.Model):
 
     __tablename__ = 'event_attended'
 
-    user_id = db.Column(db.Integer, ForeignKey=('users.user_id'), nullable=False)
-    event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
+    attendee_id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True
+                    )
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.event_id'), nullable=False)
 
     # Same question as EventOwner class
     # Move relationship to user and event classes 
     # Many to many demo code
     #secondary ref
-    user = db.relationship('User', backref='event_owner')
-    event = db.relationship('Event', backref='event_owner')
+
 
     # Same question as EventOwner class
     def __repr__(self):
@@ -100,13 +106,13 @@ class Post(db.Model):
 
     post_id = db.Column(db.Integer,
                         primary_key=True,
-                        autoincrment=True,
+                        autoincrement=True,
                         nullable=False
                         )
     post_date = db.Column(db.Date, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, ForeignKey=('users.user_id'), nullable=False)
-    event_id = db.Column(db.Integer, ForeignKey=('events.event_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.event_id'), nullable=False)
 
     # Same question as EventOwner class
     #backref can be named anything it's not the name of the table
