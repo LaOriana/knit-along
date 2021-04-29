@@ -13,6 +13,7 @@ def create_user(username, email, password, image):
 
     return user
 
+
 def create_event(event_name, start_date, end_date, pattern):
     """Create and return a new event."""
 
@@ -22,3 +23,19 @@ def create_event(event_name, start_date, end_date, pattern):
     db.session.commit()
 
     return event
+
+
+def create_post(post_date, content):
+    """Create and return a new post."""
+
+    post = Post(post_date=post_date, content=content)
+
+    db.session.add(post)
+    db.session.commit()
+
+    return post
+
+
+if __name__ == '__main__':
+    from server import app
+    connect_to_db(app)
