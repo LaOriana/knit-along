@@ -12,9 +12,11 @@ def hompage():
 
     return render_template('homepage.html')
 
-# @app.route('/signup')
-# def signup():
-#     """Signup user."""
+@app.route('/signup')
+def signup():
+    """Signup user."""
+
+    return render_template('signup.html')
 
 # @app.route('/login')
 # def user_login():
