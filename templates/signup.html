@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Knit Along Sign Up {% endblock%}
+
+{% block body%}
+
+    <header>
+        <h1>Sign up for a Knit Along account</h1>
+    </header>
+    <nav>
+        <!-- Need to figure out what will go here. -->
+        <a href="/">Home</a>
+        <!-- <a href="/login">Login</a> -->
+    </nav>
+        <div id="signup-form">
+            <form action='/signup' method="POST">
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" required>
+                <br>
+                <label for="password">Password</label>
+                <input type="text" name="password" id="password" required>
+                <input type="submit" value="Create an account">
+            </form>
+        </div>
+        
+    <footer>
+        <!-- Need to figure out what will go here. -->
+        Contact us!
+    </footer>
+
+{% endblock %}
