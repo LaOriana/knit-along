@@ -18,9 +18,11 @@ def signup():
 
     return render_template('signup.html')
 
-# @app.route('/login')
-# def user_login():
-#     """Login user."""
+@app.route('/login')
+def user_login():
+    """Login user."""
+
+    return render_template('login.html')
 
 # @app.route('/logout')
 # def user_login():
