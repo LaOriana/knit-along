@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %} Knit Along Login {% endblock%}
+
+{% block body%}
+
+    <header>
+        <h1>Login to Knit Along</h1>
+    </header>
+    <nav>
+        <!-- Need to figure out what will go here. -->
+        <a href="/">Home</a>
+        <!-- <a href="/login">Login</a> -->
+    </nav>
+        <div id="login-form">
+            <form action='/login' method="POST">
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" required>
+                <br>
+                <label for="password">Password</label>
+                <input type="text" name="password" id="password" required>
+                <br>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+        
+    <!-- <footer> -->
+        <!-- Need to figure out what will go here. -->
+        <!-- Contact us! -->
+    <!-- </footer> -->
+
+{% endblock %}
