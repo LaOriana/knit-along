@@ -36,6 +36,24 @@ def create_post(post_date, content):
     return post
 
 
+def get_users():
+    """Return all users."""
+
+    return User.query.all()
+
+
+def get_user_by_id(user_id):
+    """Return user with ID."""
+
+    return User.query.get(user_id)
+
+
+def get_user_by_email(email):
+    """Return a user with email."""
+
+    return User.query.filter(User.emaill == email).first()
+
+
 if __name__ == '__main__':
     from server import app
     connect_to_db(app)
