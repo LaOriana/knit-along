@@ -7,9 +7,16 @@ import model
 app = Flask(__name__)
 
 @app.route('/')
-def hompage():
+def homepage():
     """View homepage."""
+    
+    # check to see if user is logged in 
+    # if the user is logged in
+        #redirect to bookshelf 
+    # else redirect to login/sign up
+        #need to decide if this redirect is actually the homepage
 
+    # this will most likely not be needed once I complete the above items
     return render_template('homepage.html')
 
 @app.route('/signup')
