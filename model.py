@@ -20,8 +20,8 @@ class User(db.Model):
                         autoincrement=True
                         )
     username = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(320), nullable=False)
-    password = db.Column(db.String, nullable=False)
+    email = db.Column(db.String(320), unique=True, nullable=False)
+    password = db.Column(db.String, unique=True, nullable=False)
     image = db.Column(db.String, nullable=True)
 
     owned_events = db.relationship('Event', secondary='event_owner')

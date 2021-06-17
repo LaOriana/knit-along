@@ -4,8 +4,11 @@ from crud import get_user_by_email
 from flask import (Flask, render_template, request, flash, session, redirect)
 from model import connect_to_db
 import model
+import os
 
 app = Flask(__name__)
+# need to run source secrets.sh for this to work
+app.secret_key = os.environ.get('SECRET_KEY')
 
 @app.route('/')
 def homepage():
@@ -17,17 +20,10 @@ def homepage():
     # else redirect to login/sign up
         #need to decide if this redirect is actually the homepage
     
-    input_email = request.form.get('email')
-    input_password = request.form.get('password')
-    user = get_user_by_email(input_email)
-
-    if user and user.password == input_password:
-        session['user'] = user.user_id
+    # Before this said if session['user']: but it didn't work
+    if 'user_id' in session:
         flash('Logged in.')
         return redirect('/bookshelf')
-    else:
-        flash('Incorrect login')
-        return redirect('/')
 
     # this will most likely not be needed once I complete the above items
     return render_template('homepage.html')
@@ -39,11 +35,24 @@ def homepage():
 
 #     return render_template('signup.html')
 
-# @app.route('/login')
-# def user_login():
-#     """Login user."""
+@app.route('/login', methods=["POST"])
+def user_login():
+    """Login user."""
 
-#     return render_template('login.html')
+    input_email = request.form.get('email')
+    print(f'input_email {input_email}')
+    input_password = request.form.get('password')
+    user = get_user_by_email(input_email)
+
+    if user and user.password == input_password:
+        session['user'] = user.user_id
+        flash('Logged in.')
+        return redirect('/bookshelf')
+    else:
+        flash('Incorrect login')
+        return redirect('/')
+
+    # return render_template('login.html')
 
 # @app.route('/logout')
 # def user_login():
