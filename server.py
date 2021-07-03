@@ -1,10 +1,11 @@
 """Server for knit-along app."""
 
-from crud import get_user_by_email
 from flask import (Flask, render_template, request, flash, session, redirect)
 from model import connect_to_db
+from crud import get_user_by_email
 import model
 import os
+import crud
 
 app = Flask(__name__)
 # need to run source secrets.sh for this to work
@@ -54,6 +55,12 @@ def user_login():
 
     # return render_template('login.html')
 
+@app.route('/bookshelf')
+def bookshelf():
+    """View bookshelf."""
+    
+    return render_template('bookshelf.html')
+
 # @app.route('/logout')
 # def user_login():
 #     """Login user."""
@@ -70,4 +77,5 @@ def user_login():
 
 
 if __name__ == '__main__':
+    connect_to_db(app)
     app.run(host='0.0.0.0', debug=True)

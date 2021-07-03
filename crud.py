@@ -51,8 +51,7 @@ def get_user_by_id(user_id):
 def get_user_by_email(email):
     """Return a user with email."""
 
-    # return User.query.get(email)
-    # return User.query.filter_by(email=email).first()
+    return User.query.filter(User.email == email).first()
 
 
 if __name__ == '__main__':

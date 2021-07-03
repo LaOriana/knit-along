@@ -4,7 +4,12 @@
         <title>{% block title %} Title {% endblock %}</title>
     </head>
     <body>
-
+        <!-- review this flash code -->
+        {% for msg in get_flashed_messages() %}
+            <p class="flash-msg">
+                {{ msg }}
+            </p>
+        {% endfor %}
     </body>
 
     {% block body %}

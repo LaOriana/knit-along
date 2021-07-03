@@ -120,7 +120,7 @@ class Post(db.Model):
     event = db.relationship('Event', backref='posts')
 
     # change echo to True to see thing in console
-def connect_to_db(flask_app, database='knitalong', echo=False):
+def connect_to_db(flask_app, database='knitalong', echo=True):
     """Connect to database."""
 
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{database}"
