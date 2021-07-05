@@ -15,8 +15,8 @@ app.secret_key = os.environ.get('SECRET_KEY')
 def homepage():
     """View homepage."""
     
-    if session['user']:
-    # if 'user_id' in session:
+    # if session['user']:
+    if 'user' in session:
         # wasn't redirecting with code above. When switched to if session['user']: it worked
         flash('Logged in.')
         return redirect('/bookshelf')
@@ -32,14 +32,17 @@ def signup():
     username = request.form.get('username')
     email = request.form.get('email')
     password = request.form.get('password')
+    image = 'https://tinyurl.com/2ujz8nxb'
 
-    if get_user_by_email(email) == email:
-        flash('That email is already in use. Please use another email.')
+    if get_user_by_email(email):
+        flash('That email is already in use. Please login or use another email.')
     
     else:
-        create_user(username, email, password, #image)
-        flash('Your account has been created. Please log in.')
-
+        user = create_user(username, email, password, image)
+        session['user'] = user.user_id
+        flash('Your account has been created and you\'re logged in.')
+        return redirect('/bookshelf')
+        
     return redirect('/')
 
 
