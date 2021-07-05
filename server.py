@@ -2,7 +2,7 @@
 
 from flask import (Flask, render_template, request, flash, session, redirect)
 from model import connect_to_db
-from crud import get_user_by_email
+from crud import (get_user_by_email, create_user)
 import model
 import os
 import crud
@@ -15,26 +15,33 @@ app.secret_key = os.environ.get('SECRET_KEY')
 def homepage():
     """View homepage."""
     
-    # check to see if user is logged in
-    # if the user is logged in
-        #redirect to bookshelf 
-    # else redirect to login/sign up
-        #need to decide if this redirect is actually the homepage
-    
-    # Before this said if session['user']: but it didn't work
-    if 'user_id' in session:
+    if session['user']:
+    # if 'user_id' in session:
+        # wasn't redirecting with code above. When switched to if session['user']: it worked
         flash('Logged in.')
         return redirect('/bookshelf')
 
     # this will most likely not be needed once I complete the above items
     return render_template('homepage.html')
 
-# Might delete /signup and /login
-# @app.route('/signup')
-# def signup():
-#     """Signup user."""
 
-#     return render_template('signup.html')
+@app.route('/signup', methods=['POST'])
+def signup():
+    """Signup user."""
+
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if get_user_by_email(email) == email:
+        flash('That email is already in use. Please use another email.')
+    
+    else:
+        create_user(username, email, password, #image)
+        flash('Your account has been created. Please log in.')
+
+    return redirect('/')
+
 
 @app.route('/login', methods=["POST"])
 def user_login():
@@ -53,7 +60,6 @@ def user_login():
         flash('Incorrect login')
         return redirect('/')
 
-    # return render_template('login.html')
 
 @app.route('/bookshelf')
 def bookshelf():
