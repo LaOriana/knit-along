@@ -70,19 +70,58 @@ def bookshelf():
     
     return render_template('bookshelf.html')
 
-# @app.route('/logout')
-# def user_login():
-#     """Login user."""
+@app.route('/logout')
+def logout():
+    """Logout user."""
+    
+    session.pop('user')
+    return redirect('/')
+
+@app.route('/createeventpage')
+def create_event_page():
+    """Create event page."""
+
+    return render_template('createevent.html')
+
+@app.route('/createeventaction', methods=['POST'])
+def create_event_action():
+    """Creating event and adding it to the database."""
+
+    '''use crud function (create_event) to create event. 
+    This will return an event object. 
+    From this object can get eventid.
+    Pass eventID to event.html'''
+
+    input_title = request.form.get('title')
+    print(input_title)
+
+    return redirect('/event')
+
+# Is this a get or post?
+@app.route('/event', methods=['POST'])
+def event():
+    """Event information."""
+
+    # return will use event ID to get event information 
+    # and then pass this using jinja
+
 
 # app routes go here
-# Create account
-# Login
+# Create account - complete
+# Login - complete
+# Logout - complete
+# Homepage - complete
 # Account
-# Homepage
 # Bookshelf
 # Create Event
+    # similar to login
+    # create fields for API/user - use database fields
+    # timeframe - look up on google if there is a type='date'?
+    # use crud function create_event
+    # redirect to event page and give eventID to event info
 # Event Info
 # Forum
+# Option to edit event
 
 
 if __name__ == '__main__':
