@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Create Knit Along Event {% endblock%}
+
+{% block body %}
+
+    <header>
+        <h1>Create Event</h1>
+    </header>
+    <nav>
+        <!-- Need to figure out what will go here. -->
+        <a href="/">Home</a>
+        <a href="/logout">Logout</a>
+        <!-- <a href="/login">Login</a> --> 
+    </nav>
+    <div id="event-form">
+        <form action='/event' method="POST">
+            <label for="title">Event Title</label>
+            <input type="text" name="title" id="title" required>
+            <br>
+            <input type="submit" value="Create">
+        </form>
+    </div>
+
+    {% endblock %}
