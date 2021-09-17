@@ -14,9 +14,18 @@
         <!-- <a href="/login">Login</a> --> 
     </nav>
     <div id="event-form">
-        <form action='/event' method="POST">
-            <label for="title">Event Title</label>
-            <input type="text" name="title" id="title" required>
+        <form action='/createeventpage' method="POST">
+            <label for="event_name">Event Title</label>
+            <input type="text" name="event_name" id="event_name" required>
+            <br>
+            <label for="start_date">Start Date</label>
+            <input type="date" name="start_date" id="start_date" required>
+            <br>
+            <label for="end_date">End Date</label>
+            <input type="date" name="end_date" id="end_date" required>
+            <br>
+            <label for="pattern">Pattern URL</label>
+            <input type="url" name="pattern", id="pattern" required>
             <br>
             <input type="submit" value="Create">
         </form>
