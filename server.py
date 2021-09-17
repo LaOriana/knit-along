@@ -81,7 +81,7 @@ def logout():
 def create_event_page():
     """Create event page."""
 
-    return render_template('createevent.html')
+    return render_template('createeventpage.html')
 
 @app.route('/createeventaction', methods=['POST'])
 def create_event_action():
